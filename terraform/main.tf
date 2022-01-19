@@ -243,3 +243,19 @@ resource "azurerm_virtual_machine" "mainvmweb" {
   }
 
 }
+
+resource "azurerm_managed_disk" "data" {
+  name                 = "${var.prefix}-vm-data"
+  location             = azurerm_resource_group.rg.location
+  resource_group_name  = azurerm_resource_group.rg.name
+  storage_account_type = "Standard_LRS"
+  create_option        = "Empty"
+  disk_size_gb         = 10
+}
+
+resource "azurerm_virtual_machine_data_disk_attachment" "data" {
+  managed_disk_id    = azurerm_managed_disk.data.id
+  virtual_machine_id = azurerm_virtual_machine.mainvmweb.id
+  lun                = "10"
+  caching            = "ReadWrite"
+}
