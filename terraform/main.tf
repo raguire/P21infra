@@ -10,17 +10,16 @@ terraform {
 
       version = "~> 2.65"
 
+        }
     }
-
-  }
-
-
-
-  required_version = ">= 1.1.0"
-
+    backend "azurerm" {
+        resource_group_name  = "p21-eus2-np-sa"
+        storage_account_name = "tfstateo1kwu"
+        container_name       = "tfstate"
+        key                  = "terraform.tfstate"
+    }
+   required_version = ">= 1.1.0"
 }
-
-
 
 provider "azurerm" {
 
