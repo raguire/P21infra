@@ -259,3 +259,19 @@ resource "azurerm_virtual_machine_data_disk_attachment" "data" {
   lun                = "10"
   caching            = "ReadWrite"
 }
+
+resource "azurerm_managed_disk" "logs" {
+  name                 = "${var.prefix}-vm-logs"
+  location             = azurerm_resource_group.rg.location
+  resource_group_name  = azurerm_resource_group.rg.name
+  storage_account_type = "Standard_LRS"
+  create_option        = "Empty"
+  disk_size_gb         = 10
+}
+
+resource "azurerm_virtual_machine_data_disk_attachment" "logs" {
+  managed_disk_id    = azurerm_managed_disk.logs.id
+  virtual_machine_id = azurerm_virtual_machine.mainvmweb.id
+  lun                = "10"
+  caching            = "ReadWrite"
+}
