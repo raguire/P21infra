@@ -271,6 +271,6 @@ resource "azurerm_managed_disk" "logs" {
 resource "azurerm_virtual_machine_data_disk_attachment" "logs" {
   managed_disk_id    = azurerm_managed_disk.logs.id
   virtual_machine_id = azurerm_virtual_machine.mainvmweb.id
-  lun                = "10"
+  lun                = "20"
   caching            = "ReadWrite"
 }
