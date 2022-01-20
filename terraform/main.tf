@@ -1,4 +1,5 @@
 # Configure the Azure provider
+# need to validate configs
 
 terraform {
   required_providers {
