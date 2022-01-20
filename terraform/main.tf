@@ -1,15 +1,10 @@
 # Configure the Azure provider
 
 terraform {
-
   required_providers {
-
     azurerm = {
-
       source  = "hashicorp/azurerm"
-
       version = "~> 2.65"
-
         }
     }
     backend "azurerm" {
@@ -22,20 +17,14 @@ terraform {
 }
 
 provider "azurerm" {
-
   features {}
-
 }
-
-
 
 variable "prefix" {
 
   default = "webnp"
 
 }
-
-
 
 resource "azurerm_resource_group" "rg" {
 
@@ -60,43 +49,11 @@ resource "azurerm_network_security_group" "nsg" {
 
 
 resource "azurerm_virtual_network" "vnet" {
-
   name                = "p21-eus2-vnet"
-
   location            = azurerm_resource_group.rg.location
-
   resource_group_name = azurerm_resource_group.rg.name
-
   address_space       = ["10.0.0.0/16"]
-
   #dns_servers         = ["10.0.0.4", "10.0.0.5"]
-
-
-
-  subnet {
-
-    name           = "p21-db"
-
-    address_prefix = "10.0.2.0/24"
-
-    security_group = azurerm_network_security_group.nsg.id
-
-  }
-
-
-
-  subnet {
-
-    name           = "p21-app"
-
-    address_prefix = "10.0.3.0/24"
-
-    security_group = azurerm_network_security_group.nsg.id
-
-  }
-
-
-
   tags = {
 
     environment = "Non Prod"
@@ -105,66 +62,35 @@ resource "azurerm_virtual_network" "vnet" {
 
 }
 
-
-
 resource "azurerm_subnet" "p21web" {
-
   name                 = "p21-web"
-
   resource_group_name  = azurerm_resource_group.rg.name
-
   virtual_network_name = azurerm_virtual_network.vnet.name
-
   address_prefixes     = ["10.0.1.0/24"]
-
 }
 
 
 
 resource "azurerm_public_ip" "p21pip" {
-
   name                = "p21-web-pip"
-
   resource_group_name = azurerm_resource_group.rg.name
-
   location            = azurerm_resource_group.rg.location
-
   allocation_method   = "Static"
-
-
-
   tags = {
-
     environment = "Non Prod"
-
   }
-
 }
 
-
-
 resource "azurerm_network_interface" "mainweb" {
-
   name                = "${var.prefix}-nic"
-
   location            = azurerm_resource_group.rg.location
-
   resource_group_name = azurerm_resource_group.rg.name
-
-
-
   ip_configuration {
-
     name                          = "pocpip"
-
     subnet_id                     = azurerm_subnet.p21web.id
-
     private_ip_address_allocation = "Dynamic"
-
     public_ip_address_id          = azurerm_public_ip.p21pip.id
-
   }
-
 }
 
 
